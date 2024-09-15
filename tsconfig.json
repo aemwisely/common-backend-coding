@@ -22,7 +22,8 @@
       "@libs/core/*": ["libs/core/src/*"],
       "@libs/common/*": ["libs/common/src/*"],
       "@config/*": ["src/config/*"],
-      "@application/*": ["src/api/*"]
+      "@application/*": ["src/api/*"],
+      "@authen/*": ["src/authen/*"]
     }
   }
 }
