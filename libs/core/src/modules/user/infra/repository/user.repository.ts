@@ -39,7 +39,10 @@ export class UserImplementRepository extends UserRepository {
     return await this.repository.save(entity);
   }
 
-  createQueryBuilder(alias: string, filter?: Partial<CommonFilter>): SelectQueryBuilder<UserEntity> {
+  createQueryBuilder(
+    alias: string,
+    filter?: Partial<CommonFilter>,
+  ): SelectQueryBuilder<UserEntity> {
     const queryBuilder = this.repository.createQueryBuilder(alias);
 
     if (filter?.pagination) {

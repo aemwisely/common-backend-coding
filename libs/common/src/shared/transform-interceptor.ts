@@ -8,8 +8,13 @@ interface Response<T> {
 }
 
 export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> | Promise<Observable<any>> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> | Promise<Observable<any>> {
     context.switchToHttp().getResponse();
-    return next.handle().pipe(map((data) => ({ success: true, timestamp: new Date(), ...(data as any) })));
+    return next
+      .handle()
+      .pipe(map((data) => ({ success: true, timestamp: new Date(), ...(data as any) })));
   }
 }

@@ -1,7 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { AllExceptionsFilter, TransformInterceptor, corsOptions } from '@libs/common/shared';
+import {
+  AllExceptionsFilter,
+  TransformInterceptor,
+  corsOptions,
+} from '@libs/common/shared';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import SwaggerSetup from '@libs/common/shared/swagger-setup';

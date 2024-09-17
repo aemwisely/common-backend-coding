@@ -10,7 +10,9 @@ export interface IJwtUserDecorator {
   };
 }
 
-export const JwtDecorator = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest();
-  return request.user as IJwtUserDecorator;
-});
+export const JwtDecorator = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user as IJwtUserDecorator;
+  },
+);

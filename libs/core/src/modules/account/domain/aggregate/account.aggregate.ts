@@ -35,12 +35,16 @@ export class AccountAggregate implements Attributes, Behaviors {
     this.jwtService = jwtService;
   }
 
-  static createAccountAggregate(attr: Partial<Attributes>, jwtService?: JwtService): AccountAggregate {
+  static createAccountAggregate(
+    attr: Partial<Attributes>,
+    jwtService?: JwtService,
+  ): AccountAggregate {
     return new AccountAggregate(attr, jwtService);
   }
 
   validatePassword(password: string): boolean {
-    return bcrypt.compareSync(password, this._password);
+    const result = bcrypt.compareSync(password, this._password);
+    return result;
   }
 
   getPayload(): IJwtUserDecorator {

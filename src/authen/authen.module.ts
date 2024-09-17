@@ -6,7 +6,12 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { JwtStrategy } from '@libs/common/auth';
 import { PassportModule } from '@nestjs/passport';
-import { AccountImplementRepository, AccountRepository, AccountService } from '@libs/core/modules';
+import {
+  AccountImplementRepository,
+  AccountRepository,
+  AccountService,
+} from '@libs/core/modules';
+import { UserImplementRepository, UserRepository } from '@libs/core/modules/user';
 
 @Module({
   imports: [
@@ -23,6 +28,7 @@ import { AccountImplementRepository, AccountRepository, AccountService } from '@
     AuthenService,
     JwtStrategy,
     { provide: AccountRepository, useClass: AccountImplementRepository },
+    { provide: UserRepository, useClass: UserImplementRepository },
     { provide: AccountService, useClass: AuthenService },
   ],
 })

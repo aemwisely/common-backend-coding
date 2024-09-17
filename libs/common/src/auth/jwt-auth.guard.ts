@@ -1,5 +1,9 @@
 import { AuthGuard } from '@nestjs/passport';
-import { ExecutionContext, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, Equal } from 'typeorm';
 import { IJwtUserDecorator } from './jwt.decorator';
@@ -25,7 +29,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   private async validatePermissionActioner(userAction: IJwtUserDecorator) {
     const { id } = userAction?.data;
-    const now = dayjs().toDate();
+
     const findActioner = await this.datasource.manager.findOne(UserEntity, {
       where: { id: Equal(id) },
     });

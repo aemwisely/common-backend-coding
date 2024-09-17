@@ -10,7 +10,9 @@ export default () =>
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: [join(__dirname, '..', '..', '..', 'core', 'src', 'entities', '*.entity.{js,ts}')],
+    entities: [
+      join(__dirname, '..', '..', '..', 'core', 'src', 'entities', '*.entity.{js,ts}'),
+    ],
     autoLoadEntities: true,
     migrations: [join('migrations', 'model', '*{.js,.ts}')],
     migrationsTableName: 'migrations',
