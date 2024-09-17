@@ -1,16 +1,15 @@
 import { UserEntity } from '@libs/core/entities';
+import { UserRepository, UserService } from '@libs/core/modules/user';
 import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, FindOneOptions } from 'typeorm';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
-export class UserService {
-  constructor(
-    @InjectDataSource()
-    private datasource: DataSource,
-  ) {}
+export class UserImplementService extends UserService {
+  constructor(private userRepository: UserRepository) {
+    super();
+  }
 
-  async findOne(options: FindOneOptions<UserEntity>): Promise<UserEntity> {
-    return await this.datasource.manager.findOne(UserEntity, options);
+  async findOneUser(options: FindOneOptions<UserEntity>): Promise<UserEntity> {
+    return await this.userRepository.findOne(options);
   }
 }
