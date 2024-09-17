@@ -3,6 +3,8 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto } from './dto/login.dto';
 import { IJwtUserDecorator, JwtAuthGuard, JwtDecorator } from '@libs/common/auth';
+import { instanceToPlain } from 'class-transformer';
+import { BaseGroups, UserGroups } from 'libs/common';
 
 @Controller('auth')
 @ApiTags('authorized')
@@ -44,8 +46,11 @@ export class AuthenController {
   async findMe(@JwtDecorator() jwtActioner: IJwtUserDecorator) {
     try {
       const findUserAccount = await this.authService.findSelfAccount(jwtActioner);
+      const data = instanceToPlain(findUserAccount, {
+        groups: [BaseGroups.VIEW, UserGroups.ACTION],
+      });
       return {
-        data: findUserAccount,
+        data: data,
       };
     } catch (error) {
       throw error;

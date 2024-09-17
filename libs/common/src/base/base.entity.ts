@@ -8,10 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BaseGroups } from '../groups';
 
 export class CommonEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int4' })
-  @Expose({ groups: [] })
+  @Expose({ groups: [BaseGroups.VIEW] })
   @ApiProperty()
   id: number;
 
@@ -20,7 +21,7 @@ export class CommonEntity extends BaseEntity {
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  @Expose({ groups: [] })
+  @Expose({ groups: [BaseGroups.VIEW] })
   @ApiProperty()
   createdAt: Date;
 
@@ -29,7 +30,7 @@ export class CommonEntity extends BaseEntity {
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  @Expose({ groups: [] })
+  @Expose({ groups: [BaseGroups.VIEW] })
   @ApiProperty()
   updatedAt: Date;
 
