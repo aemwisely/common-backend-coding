@@ -4,8 +4,7 @@ import { AccountAggregate, AccountRepository, AccountService } from '@libs/core/
 import { UserRepository } from '@libs/core/modules/user';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { hashPassword } from 'libs/common';
-import { I18nContext, I18nService } from 'nestjs-i18n';
+import { hashPassword, ReturningTranslator } from 'libs/common';
 import { Equal } from 'typeorm';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class AuthenService extends AccountService {
     private jwtService: JwtService,
     private accountRepository: AccountRepository,
     private userRepository: UserRepository,
-    private i18nService: I18nService,
   ) {
     super();
   }
@@ -23,7 +21,7 @@ export class AuthenService extends AccountService {
     const findAccount = await this.accountRepository.findAccount(email);
 
     if (!findAccount) {
-      throw new NotFoundException(this.i18nService.t('common.data-not-found'));
+      throw new NotFoundException(ReturningTranslator('common.data-not-found'));
     }
 
     const accountAggregate = AccountAggregate.createAccountAggregate(
@@ -32,7 +30,7 @@ export class AuthenService extends AccountService {
     );
     const validateAccount = await this.validateAccount(accountAggregate, password);
     if (!validateAccount) {
-      throw new BadRequestException(this.i18nService.t('common.invalid-password'));
+      throw new BadRequestException(ReturningTranslator('common.invalid-password'));
     }
     const payload = accountAggregate.getPayload();
     const token = accountAggregate.getToken(payload);
@@ -58,7 +56,7 @@ export class AuthenService extends AccountService {
     const findUser = await this.accountRepository.findAccount(email);
 
     if (findUser) {
-      throw new BadRequestException(this.i18nService.t('common.data-already-exists'));
+      throw new BadRequestException(ReturningTranslator('common.data-already-exists'));
     }
 
     const createUserAccount = this.userRepository.create({
@@ -82,7 +80,7 @@ export class AuthenService extends AccountService {
     });
 
     if (!findUser) {
-      throw new NotFoundException(this.i18nService.t('common.data-not-found'));
+      throw new NotFoundException(ReturningTranslator('common.data-not-found'));
     }
 
     return findUser;

@@ -8,3 +8,4 @@ export * from './transform-interceptor';
 export * from './hash-function';
 export * from './language-headers';
 export * from './i18n-resolver';
+export * from './return-error';

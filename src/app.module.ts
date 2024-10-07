@@ -1,12 +1,16 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { DatabaseModule } from '@config/database.module';
 import { ConfigModule } from '@config/config.module';
 import { ApiModule } from '@application/api.module';
 import { AuthModule } from '@authen/authen.module';
 import { join } from 'path';
-import { I18nModule } from 'nestjs-i18n';
+import { I18nModule, I18nService } from 'nestjs-i18n';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { CustomHeaderResolver, LanguageHeadersInterceptor } from '@libs/common/shared';
+import {
+  CustomHeaderResolver,
+  I18nServiceHelper,
+  LanguageHeadersInterceptor,
+} from '@libs/common/shared';
 
 @Module({
   imports: [
@@ -32,4 +36,10 @@ import { CustomHeaderResolver, LanguageHeadersInterceptor } from '@libs/common/s
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly i18nService: I18nService) {}
+
+  onModuleInit() {
+    I18nServiceHelper.setI18nService(this.i18nService);
+  }
+}
