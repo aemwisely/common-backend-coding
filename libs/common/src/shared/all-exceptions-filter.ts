@@ -30,8 +30,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     response.status(status).json({
       success: false,
       statusCode: status,
-      timestamp: new Date().toISOString(),
       message: errorMessage,
+      timestamp: new Date().toISOString(),
     });
   }
 }
