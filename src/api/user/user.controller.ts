@@ -1,20 +1,14 @@
 import { CommonFilter } from '@libs/common/base';
 import { UserService } from '@libs/core/modules/user';
-import {
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { instanceToPlain } from 'class-transformer';
-import { BaseGroups, UserGroups } from 'libs/common';
+import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
 import { Equal } from 'typeorm';
 
 @Controller('user')
 @ApiTags('user')
+@ApiGlobalHeaders()
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -34,13 +28,14 @@ export class UserController {
 
   @Get('/:id')
   async findOneUser(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.userService.findOneUser({ where: { id: Equal(id) } });
-    if (!user) {
-      throw new NotFoundException('User not found');
+    try {
+      const user = await this.userService.findOneUser({ where: { id: Equal(id) } });
+      const data = instanceToPlain(user, { groups: [BaseGroups.VIEW, UserGroups.LIST] });
+      return {
+        data: data,
+      };
+    } catch (error) {
+      throw error;
     }
-    const data = instanceToPlain(user, { groups: [BaseGroups.VIEW, UserGroups.LIST] });
-    return {
-      data: data,
-    };
   }
 }

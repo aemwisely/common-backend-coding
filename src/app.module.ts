@@ -4,7 +4,9 @@ import { ConfigModule } from '@config/config.module';
 import { ApiModule } from '@application/api.module';
 import { AuthModule } from '@authen/authen.module';
 import { join } from 'path';
-import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
+import { I18nModule } from 'nestjs-i18n';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CustomHeaderResolver, LanguageHeadersInterceptor } from '@libs/common/shared';
 
 @Module({
   imports: [
@@ -18,8 +20,16 @@ import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
         path: join(__dirname, '..', '/i18n/'),
         watch: true,
       },
-      resolvers: [{ use: AcceptLanguageResolver, options: ['lang', 'locale', 'l'] }],
+      resolvers: [
+        new CustomHeaderResolver('en'), // Use your custom resolver with fallback language 'en'
+      ],
     }),
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LanguageHeadersInterceptor, // Your interceptor
+    },
   ],
 })
 export class AppModule {}

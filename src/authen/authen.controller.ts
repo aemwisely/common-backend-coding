@@ -4,9 +4,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto } from './dto/login.dto';
 import { IJwtUserDecorator, JwtAuthGuard, JwtDecorator } from '@libs/common/auth';
 import { instanceToPlain } from 'class-transformer';
-import { BaseGroups, UserGroups } from 'libs/common';
+import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
 
 @Controller('auth')
+@ApiGlobalHeaders()
 @ApiTags('authorized')
 export class AuthenController {
   constructor(private authService: AccountService) {}

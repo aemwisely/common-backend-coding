@@ -6,3 +6,5 @@ export * from './morgan-options';
 export * from './swagger-setup';
 export * from './transform-interceptor';
 export * from './hash-function';
+export * from './language-headers';
+export * from './i18n-resolver';

@@ -23,9 +23,7 @@ export class AuthenService extends AccountService {
     const findAccount = await this.accountRepository.findAccount(email);
 
     if (!findAccount) {
-      throw new NotFoundException(
-        this.i18nService.t('common.data-not-found', { lang: I18nContext.current().lang }),
-      );
+      throw new NotFoundException(this.i18nService.t('common.data-not-found'));
     }
 
     const accountAggregate = AccountAggregate.createAccountAggregate(
@@ -34,7 +32,7 @@ export class AuthenService extends AccountService {
     );
     const validateAccount = await this.validateAccount(accountAggregate, password);
     if (!validateAccount) {
-      throw new BadRequestException('Password not match');
+      throw new BadRequestException(this.i18nService.t('common.invalid-password'));
     }
     const payload = accountAggregate.getPayload();
     const token = accountAggregate.getToken(payload);
@@ -60,7 +58,7 @@ export class AuthenService extends AccountService {
     const findUser = await this.accountRepository.findAccount(email);
 
     if (findUser) {
-      throw new BadRequestException('Account already exists');
+      throw new BadRequestException(this.i18nService.t('common.data-already-exists'));
     }
 
     const createUserAccount = this.userRepository.create({
@@ -84,7 +82,7 @@ export class AuthenService extends AccountService {
     });
 
     if (!findUser) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(this.i18nService.t('common.data-not-found'));
     }
 
     return findUser;

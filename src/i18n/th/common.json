@@ -1,3 +1,5 @@
 {
-  "data-not-found": "ไม่พบข้อมูล"
+  "data-not-found": "ไม่พบข้อมูล",
+  "invalid-password": "รหัสผ่านไม่ถูกต้อง",
+  "data-already-exists": "ข้อมูลนี้มีอยู่แล้ว"
 }
