@@ -5,6 +5,7 @@ import { UserRepository } from '@libs/core/modules/user';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { hashPassword } from 'libs/common';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { Equal } from 'typeorm';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AuthenService extends AccountService {
     private jwtService: JwtService,
     private accountRepository: AccountRepository,
     private userRepository: UserRepository,
+    private i18nService: I18nService,
   ) {
     super();
   }
@@ -21,7 +23,9 @@ export class AuthenService extends AccountService {
     const findAccount = await this.accountRepository.findAccount(email);
 
     if (!findAccount) {
-      throw new NotFoundException('Account not found');
+      throw new NotFoundException(
+        this.i18nService.t('common.data-not-found', { lang: I18nContext.current().lang }),
+      );
     }
 
     const accountAggregate = AccountAggregate.createAccountAggregate(
