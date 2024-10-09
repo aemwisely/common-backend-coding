@@ -18,7 +18,6 @@ export class StorageService {
   }
 
   getRandomFileName(file: Express.Multer.File) {
-    //random name
     const randomName =
       new Date().getTime() +
       '-' +
@@ -26,6 +25,7 @@ export class StorageService {
         .fill(null)
         .map(() => Math.round(Math.random() * 16).toString(16))
         .join('');
+
     return `${randomName}-${new Date().getTime()}${extname(file.originalname)}`;
   }
 
