@@ -9,15 +9,24 @@ export class StorageService {
 
   constructor(private configService: ConfigService) {
     this.minioClient = new Minio.Client({
-      endPoint: process.env.MINIO_URL,
-      port: parseInt(process.env.MINIO_PORT),
-      useSSL: process.env.MINIO_SSL === 'true',
-      accessKey: process.env.MINIO_ACCESS_KEY,
-      secretKey: process.env.MINIO_SECRET_KEY,
+      endPoint: this.configService.get('minio.url'),
+      port: parseInt(this.configService.get('minio.port'), 10),
+      useSSL: this.configService.get('minio.ssl') === 'true',
+      accessKey: this.configService.get('minio.accessKey'),
+      secretKey: this.configService.get('minio.secretKey'),
     });
   }
 
-  getRandomFileName(file: Express.Multer.File) {
+  async upload(bucket: string, file: Express.Multer.File) {
+    try {
+      return this.putObjectAndPresignUrl(bucket, file);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private getRandomFileName(file: Express.Multer.File) {
+    //random name
     const randomName =
       new Date().getTime() +
       '-' +
@@ -25,25 +34,35 @@ export class StorageService {
         .fill(null)
         .map(() => Math.round(Math.random() * 16).toString(16))
         .join('');
-
     return `${randomName}-${new Date().getTime()}${extname(file.originalname)}`;
   }
 
-  async upload(subPath: string, file: Express.Multer.File): Promise<[string, string]> {
-    try {
-      const filename = this.getRandomFileName(file);
-      const bucket = this.configService.get('MINIO_BUCKET');
-      const objectName = `${subPath}/${filename}`;
-      await this.minioClient.putObject(bucket, objectName, file.buffer);
-      const url = await this.presignedUrl(objectName);
-      return [filename, url];
-    } catch (error) {
-      throw error;
-    }
+  private async putObjectAndPresignUrl(
+    bucket: string,
+    file: Express.Multer.File,
+  ): Promise<{
+    filename: string;
+    url: string;
+    key: string;
+  }> {
+    // key = filename ? folder = folder + /$filename
+    const filename = this.getRandomFileName(file);
+    const key = filename;
+    await this.minioClient.putObject(bucket, key, file.buffer);
+    const url = await this.presignedUrl(bucket, key);
+
+    return {
+      filename,
+      url,
+      key,
+    };
   }
 
-  async presignedUrl(filename: string) {
-    const bucket = this.configService.get('MINIO_BUCKET');
-    return await this.minioClient.presignedGetObject(bucket, filename, 60 * 60 * 24 * 7);
+  async presignedUrl(
+    bucket: string,
+    key: string,
+    expiry: number = 60 * 60 * 24 * 7,
+  ): Promise<string> {
+    return this.minioClient.presignedGetObject(bucket, key, expiry);
   }
 }
