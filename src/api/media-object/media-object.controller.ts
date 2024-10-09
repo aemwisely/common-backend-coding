@@ -1,8 +1,18 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { MediaObjectService } from './media-object.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileUpload } from 'libs/common';
+import { CommonFilter, FileUpload } from 'libs/common';
 
 @Controller('media-object')
 @ApiTags('media-object')
@@ -21,5 +31,21 @@ export class MediaObjectController {
     } catch (error) {
       throw error;
     }
+  }
+
+  @Get('/')
+  async findAll(@Query() filter: CommonFilter) {
+    const result = await this.mediaObjService.findAllAndCount(filter);
+    return {
+      data: result,
+    };
+  }
+
+  @Get('/:id')
+  async findOneById(@Param('id', ParseIntPipe) id: number) {
+    const result = await this.mediaObjService.findOneById(id);
+    return {
+      data: result,
+    };
   }
 }

@@ -1,11 +1,12 @@
+import { CommonFilter } from '@libs/common/base';
+import { FileUpload } from '@libs/common/shared';
 import dayjs from '@libs/common/shared/dayjs';
 import { StorageService } from '@libs/common/storage';
 import { MediaObjectEntity } from '@libs/core/entities';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { FileUpload } from 'libs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Equal, Repository } from 'typeorm';
 
 @Injectable()
 export class MediaObjectService {
@@ -46,5 +47,21 @@ export class MediaObjectService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async findAllAndCount(filter: CommonFilter) {
+    const { pagination, getOffset, limit } = filter;
+    const queryBuilder = this.repository.createQueryBuilder('m');
+
+    if (pagination) {
+      queryBuilder.skip(getOffset(filter)).take(limit);
+    }
+
+    queryBuilder.orderBy('m.createdAt', 'DESC');
+    return await queryBuilder.getManyAndCount();
+  }
+
+  async findOneById(id: number) {
+    return await this.repository.findOne({ where: { id: Equal(id) } });
   }
 }
