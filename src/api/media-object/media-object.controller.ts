@@ -35,9 +35,14 @@ export class MediaObjectController {
 
   @Get('/')
   async findAll(@Query() filter: CommonFilter) {
-    const result = await this.mediaObjService.findAllAndCount(filter);
+    const { page, getPageCount, limit } = filter;
+    const [result, total] = await this.mediaObjService.findAllAndCount(filter);
     return {
       data: result,
+      total,
+      page,
+      limit,
+      pageCount: getPageCount(limit, total),
     };
   }
 
