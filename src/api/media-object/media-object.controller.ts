@@ -21,7 +21,7 @@ export class MediaObjectController {
 
   @Post('/')
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 30 * 1024 * 1024 } }))
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))
   async created(@UploadedFile() file: Express.Multer.File, @Body() body: FileUpload) {
     try {
       const result = await this.mediaObjService.createAndUploadMediaFile(file, body);
