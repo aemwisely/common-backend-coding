@@ -6,7 +6,7 @@ import {
   TransformInterceptor,
   corsOptions,
 } from '@libs/common/shared';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import SwaggerSetup from '@libs/common/shared/swagger-setup';
 import helmet from 'helmet';
@@ -19,6 +19,7 @@ async function bootstrap() {
   const prefix = configService.get('SERVICE_PREFIX', 'api');
   const port = configService.get('SERVICE_PORT', 3000);
 
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.setGlobalPrefix(prefix);
   app.use(
     helmet({
