@@ -59,4 +59,14 @@ export class UserImplementRepository extends UserRepository {
   async update(id: number, body: DeepPartial<UserEntity>): Promise<UpdateResult> {
     return await this.repository.update({ id: Equal(id) }, body);
   }
+
+  async delete(id: number): Promise<boolean> {
+    const findOne = await this.repository.findOne({ where: { id: Equal(id) } });
+
+    if (findOne) {
+      await this.repository.softDelete({ id: Equal(id) });
+    }
+
+    return true;
+  }
 }

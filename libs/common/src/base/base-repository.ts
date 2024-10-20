@@ -12,12 +12,13 @@ export abstract class BaseRepository<T extends CommonEntity> {
   abstract find(options?: FindManyOptions<T>): Promise<T[]>;
   findOneById?(id: number): Promise<T>;
   create?(entity: Partial<T>): T;
-  save?(entity: T): Promise<T>; // Optional method
+  save?(entity: T): Promise<T>;
   abstract findOne(options: FindOneOptions<T>): Promise<T>;
   createQueryBuilder?(
     alias: string,
     filter?: Partial<CommonFilter>,
-  ): SelectQueryBuilder<T>; // Optional method
-  merge?(entity: T, body: DeepPartial<T>): T; // Optional method
-  update?(id: number, body: DeepPartial<T>): Promise<UpdateResult>; // Optional method
+  ): SelectQueryBuilder<T>;
+  merge?(entity: T, body: DeepPartial<T>): T;
+  update?(id: number, body: DeepPartial<T>): Promise<UpdateResult>;
+  delete?(id: number): Promise<boolean>;
 }
