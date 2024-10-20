@@ -15,7 +15,7 @@ export abstract class AccountService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<string>;
+  ): Promise<boolean>;
 
   abstract findSelfAccount(jwtActioner: IJwtUserDecorator): Promise<UserEntity>;
 }

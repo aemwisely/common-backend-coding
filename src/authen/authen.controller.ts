@@ -15,16 +15,14 @@ export class AuthenController {
   @Post('/register')
   async register(@Body() body: RegisterDto) {
     try {
-      const token = await this.authService.register(
+      await this.authService.register(
         body.email,
         body.password,
         body.firstName,
         body.lastName,
       );
       return {
-        data: {
-          accessToken: token,
-        },
+        data: {},
       };
     } catch (error) {
       throw error;
@@ -33,12 +31,16 @@ export class AuthenController {
 
   @Post('/login')
   async login(@Body() body: LoginDto) {
-    const token = await this.authService.login(body.email, body.password);
-    return {
-      data: {
-        accessToken: token,
-      },
-    };
+    try {
+      const token = await this.authService.login(body.email, body.password);
+      return {
+        data: {
+          accessToken: token,
+        },
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get('/me')

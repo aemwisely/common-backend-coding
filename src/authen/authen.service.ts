@@ -52,7 +52,7 @@ export class AuthenService extends AccountService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<string> {
+  ): Promise<boolean> {
     const findUser = await this.accountRepository.findAccount(email);
 
     if (findUser) {
@@ -64,12 +64,12 @@ export class AuthenService extends AccountService {
       firstName,
       lastName,
       password: await hashPassword(password),
+      isActive: false,
     });
 
     await this.userRepository.save(createUserAccount);
 
-    const token = await this.login(email, password);
-    return token;
+    return true;
   }
 
   async findSelfAccount(jwtActioner: IJwtUserDecorator): Promise<UserEntity> {
