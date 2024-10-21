@@ -12,7 +12,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { instanceToPlain } from 'class-transformer';
 import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
-import { Equal } from 'typeorm';
 import { BodyUserDto } from './dto/body-user.dto';
 
 @Controller('user')
@@ -60,13 +59,9 @@ export class UserController {
 
   @Delete('/:id')
   async removeUser(@Param('id', ParseIntPipe) id: number) {
-    try {
-      await this.userService.removeUser(id);
-      return {
-        data: {},
-      };
-    } catch (error) {
-      throw error;
-    }
+    await this.userService.removeUser(id);
+    return {
+      data: {},
+    };
   }
 }
