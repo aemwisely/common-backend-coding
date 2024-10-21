@@ -13,6 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { instanceToPlain } from 'class-transformer';
 import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
 import { BodyUserDto } from './dto/body-user.dto';
+import { Equal } from 'typeorm';
 
 @Controller('user')
 @ApiTags('user')
@@ -37,6 +38,13 @@ export class UserController {
   @Get('/:id')
   async findOneUser(@Param('id', ParseIntPipe) id: number) {
     try {
+      const user = await this.userService.findOneUser({ where: { id: Equal(id) } });
+      const data = instanceToPlain(user, {
+        groups: [BaseGroups.VIEW, UserGroups.LIST],
+      });
+      return {
+        data,
+      };
     } catch (error) {
       throw error;
     }

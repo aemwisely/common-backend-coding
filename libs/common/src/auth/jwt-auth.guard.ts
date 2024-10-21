@@ -1,14 +1,9 @@
 import { AuthGuard } from '@nestjs/passport';
-import {
-  ExecutionContext,
-  ForbiddenException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, Equal } from 'typeorm';
 import { IJwtUserDecorator } from './jwt.decorator';
 import { UserEntity } from '@libs/core/entities';
-import dayjs from '../shared/dayjs';
 
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(@InjectDataSource() private datasource: DataSource) {
@@ -31,15 +26,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const { id } = userAction?.data;
 
     const findActioner = await this.datasource.manager.findOne(UserEntity, {
-      where: { id: Equal(id) },
+      where: { id: Equal(id), isActive: true },
     });
 
     if (!findActioner) {
       throw new UnauthorizedException();
-    }
-
-    if (!findActioner?.isActive) {
-      throw new ForbiddenException('Inactive user');
     }
 
     return true;
