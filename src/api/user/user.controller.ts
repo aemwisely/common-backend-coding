@@ -1,6 +1,7 @@
 import { CommonFilter } from '@libs/common/base';
 import { UserService } from '@libs/core/modules/user';
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -51,7 +52,7 @@ export class UserController {
   }
 
   @Patch('/:id')
-  async updateUser(@Param('id', ParseIntPipe) id: number, @Query() body: BodyUserDto) {
+  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() body: BodyUserDto) {
     try {
       const user = await this.userService.updateUser(id, body);
       const data = instanceToPlain(user, {
