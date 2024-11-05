@@ -8,7 +8,7 @@ import { Response } from 'express';
 export class ExportExcelController {
   constructor(private exportExcelService: ExportExcelService) {}
 
-  @Post('user')
+  @Post('/user')
   async getExportUserExcel(@Res() res: Response) {
     return await this.exportExcelService.getExportUserExcel(res);
   }
