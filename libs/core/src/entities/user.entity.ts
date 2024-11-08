@@ -1,6 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { CommonEntity, UserGroups } from 'libs/common';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { MediaObjectEntity } from './media-object.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends CommonEntity {
@@ -23,4 +24,11 @@ export class UserEntity extends CommonEntity {
   @Column()
   @Expose({ groups: [UserGroups.ACTION, UserGroups.LIST] })
   isActive: boolean;
+
+  @ManyToOne(() => MediaObjectEntity)
+  profileImage: MediaObjectEntity;
+
+  @Column()
+  @Exclude()
+  profileImageId: number;
 }
