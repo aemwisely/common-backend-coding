@@ -13,7 +13,10 @@ import helmet from 'helmet';
 
 async function bootstrap() {
   const logger = new Logger(bootstrap.name);
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: ['error', 'warn'],
+    bufferLogs: true,
+  });
 
   const configService = app.get(ConfigService);
   const prefix = configService.get('SERVICE_PREFIX', 'api');
@@ -27,7 +30,7 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerSetup(app, prefix, 'base');
+  SwaggerSetup(app, prefix, 'API Documentation');
 
   app.enableCors(corsOptions);
   app.useGlobalInterceptors(new TransformInterceptor());
