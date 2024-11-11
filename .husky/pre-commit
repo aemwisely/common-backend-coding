@@ -1,5 +1,5 @@
 #!/bin/sh
-# Pre-commit hook to format, lint, and test code before committing
+# Pre-commit hook to format,before committing
 
 # Format the code
 echo "Formatting code..."

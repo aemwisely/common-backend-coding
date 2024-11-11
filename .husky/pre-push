@@ -1,0 +1,15 @@
+#!/bin/sh
+# Pre-push hook to building before push
+
+# Format the code
+echo "Building code..."
+yarn build
+
+# Check if any of the above steps failed
+if [ $? -ne 0 ]; then
+  echo "Pre-push hook failed. Please fix the issues and try again."
+  exit 1
+fi
+
+echo "Pre-push hook passed. Proceeding with push."
+exit 0
