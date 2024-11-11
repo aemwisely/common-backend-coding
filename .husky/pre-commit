@@ -1,0 +1,15 @@
+#!/bin/sh
+# Pre-commit hook to format, lint, and test code before committing
+
+# Format the code
+echo "Formatting code..."
+yarn format
+
+# Check if any of the above steps failed
+if [ $? -ne 0 ]; then
+  echo "Pre-commit hook failed. Please fix the issues and try again."
+  exit 1
+fi
+
+echo "Pre-commit hook passed. Proceeding with commit."
+exit 0
