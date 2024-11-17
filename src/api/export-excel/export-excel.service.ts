@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import * as ExcelJS from 'exceljs';
 import { Response } from 'express';
 import dayjs from '@libs/common/shared/dayjs';
+import { ExcelDataService } from './excel-data.service';
 
 @Injectable()
 export class ExportExcelService {
-  constructor(
-    @InjectDataSource()
-    private datasource: DataSource,
-  ) {}
+  constructor(private dataService: ExcelDataService) {}
 
   private addHeaders(
     worksheet: ExcelJS.Worksheet,
@@ -55,10 +51,18 @@ export class ExportExcelService {
       { header: 'Email', key: 'email', width: 32 },
     ]);
 
-    this.insertRowIntoWorksheet(worksheet, [
-      { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
-      { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com' },
-    ]);
+    const getUserByFilter = await this.dataService.getUser();
+
+    const formattedUserData = getUserByFilter?.map((value, index) => ({
+      id: index + 1,
+      name:
+        value?.firstName && value?.lastName
+          ? `${value.firstName} ${value.lastName}`
+          : '-',
+      email: value?.email || '-',
+    }));
+
+    this.insertRowIntoWorksheet(worksheet, formattedUserData);
 
     this.setResponseHeaders(res, 'users');
 
