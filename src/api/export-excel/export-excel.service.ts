@@ -21,8 +21,10 @@ export class ExportExcelService {
     worksheet: ExcelJS.Worksheet,
     data: object[],
   ): ExcelJS.Worksheet {
-    for (const object of data) {
-      worksheet.addRow(object);
+    if (data?.length > 0) {
+      for (const object of data) {
+        worksheet.addRow(object);
+      }
     }
 
     return worksheet;
