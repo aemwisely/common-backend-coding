@@ -19,6 +19,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "allowUnusedLabels": false,
+    "noImplicitReturns": true,
     "paths": {
       "@libs/core/*": ["libs/core/src/*"],
       "@libs/common/*": ["libs/common/src/*"],
