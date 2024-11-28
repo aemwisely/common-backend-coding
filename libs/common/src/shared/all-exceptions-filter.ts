@@ -6,6 +6,10 @@ import {
   Logger,
 } from '@nestjs/common';
 
+interface ErrorResponse {
+  message?: string | string[];
+}
+
 export class AllExceptionsFilter implements ExceptionFilter {
   private logger = new Logger(AllExceptionsFilter.name);
 
@@ -18,12 +22,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const error = exception instanceof HttpException ? exception.getResponse() : 'error';
-    const errorMessage = Array.isArray(error['message'])
-      ? error['message'][0]
-      : error['message']
-      ? error['message']
-      : exception['message'];
+    const error =
+      exception instanceof HttpException ? exception.getResponse() : { message: 'error' };
+
+    let errorMessage: string;
+
+    if (typeof error === 'object' && error !== null && 'message' in error) {
+      const message = (error as ErrorResponse).message;
+      errorMessage = Array.isArray(message) ? message?.[0] : message || 'Unknown error';
+    } else {
+      errorMessage =
+        typeof exception === 'object' && exception !== null && 'message' in exception
+          ? (exception as { message: string }).message
+          : 'Unknown error';
+    }
 
     this.logger.error(errorMessage);
 

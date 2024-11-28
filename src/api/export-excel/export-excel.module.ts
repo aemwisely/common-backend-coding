@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ExportExcelService } from './export-excel.service';
 import { ExportExcelController } from './export-excel.controller';
-import { ExcelDataService } from './excel-data.service';
+import { ExcelDataService } from './service/excel-data.service';
+import { ExportExcelService } from './service/export-excel.service';
 
 @Module({
   providers: [ExportExcelService, ExcelDataService],

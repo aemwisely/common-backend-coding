@@ -1,6 +1,6 @@
 import { Controller, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ExportExcelService } from './export-excel.service';
+import { ExportExcelService } from './service/export-excel.service';
 import { Response } from 'express';
 
 @Controller('export-excel')

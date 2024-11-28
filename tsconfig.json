@@ -14,10 +14,11 @@
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "allowUnusedLabels": false,
     "paths": {
       "@libs/core/*": ["libs/core/src/*"],
       "@libs/common/*": ["libs/common/src/*"],
