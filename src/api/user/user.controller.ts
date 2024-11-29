@@ -25,14 +25,14 @@ export class UserController {
   @Get('/')
   async findAllAndCounted(@Query() filter: CommonFilter) {
     const { page, limit, getPageCount } = filter;
-    const [users, total] = await this.userService.findAllUsers(filter);
+    const [users, count] = await this.userService.findAllUsers(filter);
     const data = instanceToPlain(users, { groups: [BaseGroups.VIEW, UserGroups.ACTION] });
     return {
       data: data,
-      total,
+      count,
       page,
       limit,
-      pageCount: getPageCount(limit, total),
+      pageCount: getPageCount(limit, count),
     };
   }
 
