@@ -8,7 +8,9 @@ import { CommonFilter } from 'libs/common';
 @Injectable()
 export class RoleService {
   private repository: Repository<RoleEntity>;
-  constructor(@InjectDataSource() private datasource: DataSource) {}
+  constructor(@InjectDataSource() private datasource: DataSource) {
+    this.repository = this.datasource.getRepository(RoleEntity);
+  }
 
   async createRole(body: CreateRoleDto) {
     try {
