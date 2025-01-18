@@ -1,4 +1,4 @@
-import { IJwtUserDecorator } from '@libs/common/auth';
+import { IJwtUserDecorator } from '@libs/common/decorator';
 import { UserEntity } from '@libs/core/entities';
 import { AccountAggregate, AccountRepository, AccountService } from '@libs/core/modules';
 import { UserRepository } from '@libs/core/modules/user';

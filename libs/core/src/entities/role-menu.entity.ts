@@ -1,5 +1,5 @@
 import { CommonEntity } from 'libs/common';
-import { Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { RoleEntity } from './role.entity';
 import { MenuEntity } from './menu.entity';
 
@@ -10,4 +10,10 @@ export class RoleMenuEntity extends CommonEntity {
 
   @ManyToOne(() => MenuEntity, { onDelete: 'CASCADE' })
   menu: MenuEntity;
+
+  @Column()
+  isActive: boolean;
+
+  @Column()
+  permission: string;
 }

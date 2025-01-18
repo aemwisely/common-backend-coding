@@ -2,9 +2,10 @@ import { AccountService } from '@libs/core/modules';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto } from './dto/login.dto';
-import { IJwtUserDecorator, JwtAuthGuard, JwtDecorator } from '@libs/common/auth';
 import { instanceToPlain } from 'class-transformer';
 import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
+import { IJwtUserDecorator, JwtDecorator, MenuPermission } from '@libs/common/decorator';
+import { JwtAuthGuard } from '@libs/common/auth';
 
 @Controller('auth')
 @ApiGlobalHeaders()
@@ -45,6 +46,7 @@ export class AuthenController {
 
   @Get('/me')
   @UseGuards(JwtAuthGuard)
+  @MenuPermission({ permission: 'VIEW' })
   @ApiBearerAuth()
   async findMe(@JwtDecorator() jwtActioner: IJwtUserDecorator) {
     try {

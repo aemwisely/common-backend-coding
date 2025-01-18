@@ -1,4 +1,4 @@
-import { IJwtUserDecorator } from '@libs/common/auth';
+import { IJwtUserDecorator } from '@libs/common/decorator';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 

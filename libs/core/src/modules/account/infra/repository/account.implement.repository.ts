@@ -20,6 +20,6 @@ export class AccountImplementRepository extends AccountRepository {
   }
 
   async findAccount(email: string): Promise<UserEntity> {
-    return await this.repository.findOne({ where: { email: email } });
+    return await this.repository.findOne({ where: { email: email, isActive: true } });
   }
 }

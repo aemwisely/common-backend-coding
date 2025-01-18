@@ -15,6 +15,6 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
     context.switchToHttp().getResponse();
     return next
       .handle()
-      .pipe(map((data) => ({ success: true, timestamp: new Date(), ...(data as any) })));
+      .pipe(map((data) => ({ success: true, ...(data as any), timestamp: new Date() })));
   }
 }

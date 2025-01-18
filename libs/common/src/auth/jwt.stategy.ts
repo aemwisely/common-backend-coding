@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { readFileSync } from 'fs';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import { join } from 'path';
-import { IJwtUserDecorator } from './jwt.decorator';
+import { IJwtUserDecorator } from '../decorator/jwt.decorator';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
