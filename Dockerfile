@@ -1,4 +1,6 @@
-FROM node:18.20.4-alpine3.19 as installer
+FROM node:18-alpine as base
+
+FROM base as installer
 
 WORKDIR /app
 
@@ -7,7 +9,7 @@ COPY yarn.lock .
 
 RUN yarn install --frozen-lockfile
 
-FROM node:18.20.4-alpine3.19 as builder
+FROM base as builder
 
 WORKDIR /app
 
@@ -23,7 +25,7 @@ COPY migrations ./migrations
 RUN yarn build && \
     yarn cache clean
 
-FROM node:18.20.4-alpine3.19 as runner
+FROM base as runner
 
 WORKDIR /app
 
