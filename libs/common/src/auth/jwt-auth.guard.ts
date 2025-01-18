@@ -6,6 +6,7 @@ import { IJwtUserDecorator } from '../decorator/jwt.decorator';
 import { UserEntity } from '@libs/core/entities';
 import { Reflector } from '@nestjs/core';
 import { IPermission, MENU_KEYS } from '../decorator';
+import { RolePermissionEnum } from '../enum';
 
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
@@ -63,6 +64,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   private async validatePermissionAction(menu: IPermission, userEntity: UserEntity) {
     const { permission, menu: title } = menu;
 
+    if (!title) {
+      return true;
+    }
+
     const role = userEntity?.role;
 
     if (!role) {
@@ -73,10 +78,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       (roleMenu) => roleMenu?.menu?.title === title && roleMenu?.isActive,
     );
 
-    if (!findMenu || findMenu?.permission === 'NONE') {
+    if (!findMenu) {
       return false;
     }
 
-    return true;
+    if (findMenu.permission === RolePermissionEnum.ALL) {
+      return true;
+    }
+
+    return findMenu.permission === permission;
   }
 }

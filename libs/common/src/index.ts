@@ -4,3 +4,4 @@ export * from './groups';
 export * from './base';
 export * from './storage';
 export * from './decorator';
+export * from './enum';
