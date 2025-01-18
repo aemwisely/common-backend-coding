@@ -7,13 +7,17 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { MediaObjectService } from './media-object.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CommonFilter, FileUpload } from 'libs/common';
+import { JwtAuthGuard } from '@libs/common/auth';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('media-object')
 @ApiTags('media-object')
 export class MediaObjectController {

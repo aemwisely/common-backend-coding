@@ -7,14 +7,18 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create.role.dto';
 import { instanceToPlain } from 'class-transformer';
 import { BaseGroups, CommonFilter, ReturningTranslator, RoleGroup } from 'libs/common';
 import { Equal } from 'typeorm';
+import { JwtAuthGuard } from '@libs/common/auth';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('role')
 @ApiTags('role')
 export class RoleController {

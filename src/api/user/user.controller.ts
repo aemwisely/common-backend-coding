@@ -9,13 +9,17 @@ import {
   ParseIntPipe,
   Patch,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { instanceToPlain } from 'class-transformer';
 import { ApiGlobalHeaders, BaseGroups, UserGroups } from 'libs/common';
 import { BodyUserDto } from './dto/body-user.dto';
 import { Equal } from 'typeorm';
+import { JwtAuthGuard } from '@libs/common/auth';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('user')
 @ApiTags('user')
 @ApiGlobalHeaders()
