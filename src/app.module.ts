@@ -29,7 +29,12 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         new CustomHeaderResolver('en'), // Use your custom resolver with fallback language 'en'
       ],
     }),
-    ThrottlerModule.forRoot({ throttlers: [{ ttl: 60, limit: 10 }] }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        { ttl: 60, limit: 10 }, // Global: 10 requests per minute
+        { ttl: 3600, limit: 100 }, // 100 requests per hour
+      ],
+    }),
   ],
   providers: [
     {
