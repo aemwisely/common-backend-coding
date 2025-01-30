@@ -5,12 +5,13 @@ import { ApiModule } from '@application/api.module';
 import { AuthModule } from '@authen/authen.module';
 import { join } from 'path';
 import { I18nModule, I18nService } from 'nestjs-i18n';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import {
   CustomHeaderResolver,
   I18nServiceHelper,
   LanguageHeadersInterceptor,
 } from '@libs/common/shared';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -28,11 +29,16 @@ import {
         new CustomHeaderResolver('en'), // Use your custom resolver with fallback language 'en'
       ],
     }),
+    ThrottlerModule.forRoot({ throttlers: [{ ttl: 60, limit: 10 }] }),
   ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: LanguageHeadersInterceptor, // Your interceptor
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard, // ใช้เป็น Global Guard
     },
   ],
 })
